@@ -32,8 +32,27 @@ android {
 
     }
 
+    val keystoreFile = providers.environmentVariable("KEYSTORE_FILE").orNull
+    val releaseSigning = keystoreFile
+        ?.takeIf { file(it).exists() }
+        ?.takeIf { providers.environmentVariable("KEYSTORE_PASSWORD").orNull?.isNotBlank() == true }
+        ?.takeIf { providers.environmentVariable("KEY_ALIAS").orNull?.isNotBlank() == true }
+        ?.takeIf { providers.environmentVariable("KEY_PASSWORD").orNull?.isNotBlank() == true }
+
+    signingConfigs {
+        releaseSigning?.let { keystore ->
+            create("release") {
+                storeFile = file(keystore)
+                storePassword = providers.environmentVariable("KEYSTORE_PASSWORD").get()
+                keyAlias = providers.environmentVariable("KEY_ALIAS").get()
+                keyPassword = providers.environmentVariable("KEY_PASSWORD").get()
+            }
+        }
+    }
+
     buildTypes {
         release {
+            signingConfig = signingConfigs.findByName("release")
             isMinifyEnabled = true
             isShrinkResources = true
             setProguardFiles(
