@@ -1,23 +1,23 @@
 {
-  "versionCode": 23,
-  "versionName": "2.0.0",
+  "versionCode": 26,
+  "versionName": "2.0.3",
   "prerelease": false,
-  "title": "Guise 2.0.0",
-  "notes": "## Guise Reborn 2.0.0\n\n这是 Guise 由社区接手维护后的首个正式版本。2.0.0 在保留原有按应用伪装能力的基础上，完成了 UI、配置模型、Modern Xposed 接入、更新系统和 Android 新版本兼容性的整体重构。\n\n### 外观与交互\n\n- 使用 Jetpack Compose 与 Material 3 重构界面，支持系统/浅色/深色主题、Monet 动态取色和预测性返回手势。\n- 重做应用列表、配置页、模板页、日志页和关于页，统一输入项、辅助说明、按钮状态与导航交互。\n- 配置保存、停止/重启目标应用采用 ROOT → Xposed service → 系统应用信息页三级回退；进入系统设置后使用 Toast 保证提示可见。\n\n### 伪装与隐私能力\n\n- 扩充品牌、机型、Android/SDK、全球运营商等预设数据。\n- 支持设备与系统字段、Android ID、IMEI、手机号、应用版本、网络、Wi-Fi、SIM、基站、经纬度、显示密度、语言、时区和电量配置。\n- Wi-Fi 定位信息隐藏覆盖扫描结果、SSID/BSSID/MAC 和 MLO 标识；基站信息隐藏覆盖同步、异步、现代回调、旧式监听及多种蜂窝制式。\n- 支持联系人、图片、视频、音频和应用可见性的空白通行证，以及允许强制截图。\n- 隐藏 Wi-Fi 信息优先于自定义 Wi-Fi 值；隐藏基站信息优先于 LAC/CID，避免矛盾结果。\n\n### 模板、作用域与日志\n\n- 新增通用/应用专属模板、默认模板、覆盖确认、应用搜索、自适应多列选择和应用数量统计。\n- 应用勾选状态作为 Guise 配置与 LSPosed 作用域同步的统一节点。\n- 重构运行日志采集、查看、清理和导出流程，移除旧版日志数据兼容包袱。\n\n### 更新与兼容性\n\n- 新增 GitHub 更新系统，支持启动检测、手动检测、忽略当前版本、多 CDN 自动回退、下载进度、ROOT 静默安装与安装后恢复启动。\n- 面向 API 37，适配 Android 17 行为变化；最低支持 Android 10（API 29）。\n- 当前仅提供 arm64-v8a 构建。\n\n### 功能边界\n\n- 所有修改仅作用于已在 Guise 中勾选并同步到 LSPosed 作用域的目标应用。\n- 坐标与 Wi-Fi/基站信息过滤不覆盖 IP 定位、厂商私有接口、原生私有通道或远程服务推断。\n- 部分厂商应用分身可能受其沙箱和 LSPosed 注入方式限制。\n\n- 源代码：https://github.com/daxiaamu/Guise_Reborn\n- 问题反馈：https://github.com/daxiaamu/Guise_Reborn/issues",
-  "releaseUrl": "https://github.com/daxiaamu/Guise_Reborn/releases/tag/v2.0.0",
+  "title": "Guise 2.0.3",
+  "notes": "- 修复部分应用（如高德地图）语言伪装失效。\n- 改善部分应用（如 Play 版钉钉）的 Wi-Fi 信息伪装兼容性。",
+  "releaseUrl": "https://github.com/daxiaamu/Guise_Reborn/releases/tag/v2.0.3",
   "apkUrls": [
-    "https://gh-proxy.com/https://github.com/daxiaamu/Guise_Reborn/releases/download/v2.0.0/Guise-2.0.0.apk",
-    "https://ghfast.top/https://github.com/daxiaamu/Guise_Reborn/releases/download/v2.0.0/Guise-2.0.0.apk",
-    "https://ghproxy.net/https://github.com/daxiaamu/Guise_Reborn/releases/download/v2.0.0/Guise-2.0.0.apk",
-    "https://ghproxy.vip/https://github.com/daxiaamu/Guise_Reborn/releases/download/v2.0.0/Guise-2.0.0.apk?sha=d7ac980a8cc849aa76589fd0bb6534c589e2c73c27adbaa1bb7b23cd41d96798",
-    "https://gh.jasonzeng.dev/https://github.com/daxiaamu/Guise_Reborn/releases/download/v2.0.0/Guise-2.0.0.apk",
-    "https://gh.3w.pm/https://github.com/daxiaamu/Guise_Reborn/releases/download/v2.0.0/Guise-2.0.0.apk",
-    "https://v6.gh-proxy.com/https://github.com/daxiaamu/Guise_Reborn/releases/download/v2.0.0/Guise-2.0.0.apk",
-    "https://v6.gh-proxy.org/https://github.com/daxiaamu/Guise_Reborn/releases/download/v2.0.0/Guise-2.0.0.apk",
-    "https://gh-proxy.org/https://github.com/daxiaamu/Guise_Reborn/releases/download/v2.0.0/Guise-2.0.0.apk",
-    "https://xget.xi-xu.me/gh/daxiaamu/Guise_Reborn/releases/download/v2.0.0/Guise-2.0.0.apk",
-    "https://github.com/daxiaamu/Guise_Reborn/releases/download/v2.0.0/Guise-2.0.0.apk"
+    "https://gh-proxy.com/https://github.com/daxiaamu/Guise_Reborn/releases/download/v2.0.3/Guise-2.0.3.apk",
+    "https://ghfast.top/https://github.com/daxiaamu/Guise_Reborn/releases/download/v2.0.3/Guise-2.0.3.apk",
+    "https://ghproxy.net/https://github.com/daxiaamu/Guise_Reborn/releases/download/v2.0.3/Guise-2.0.3.apk",
+    "https://ghproxy.vip/https://github.com/daxiaamu/Guise_Reborn/releases/download/v2.0.3/Guise-2.0.3.apk?sha=5021e6fda58f4fae20b085f9b102a769f8b4faeb683a891b69afb16878f25171",
+    "https://gh.jasonzeng.dev/https://github.com/daxiaamu/Guise_Reborn/releases/download/v2.0.3/Guise-2.0.3.apk",
+    "https://gh.3w.pm/https://github.com/daxiaamu/Guise_Reborn/releases/download/v2.0.3/Guise-2.0.3.apk",
+    "https://v6.gh-proxy.com/https://github.com/daxiaamu/Guise_Reborn/releases/download/v2.0.3/Guise-2.0.3.apk",
+    "https://v6.gh-proxy.org/https://github.com/daxiaamu/Guise_Reborn/releases/download/v2.0.3/Guise-2.0.3.apk",
+    "https://gh-proxy.org/https://github.com/daxiaamu/Guise_Reborn/releases/download/v2.0.3/Guise-2.0.3.apk",
+    "https://xget.xi-xu.me/gh/daxiaamu/Guise_Reborn/releases/download/v2.0.3/Guise-2.0.3.apk",
+    "https://github.com/daxiaamu/Guise_Reborn/releases/download/v2.0.3/Guise-2.0.3.apk"
   ],
-  "apkUrl": "https://github.com/daxiaamu/Guise_Reborn/releases/download/v2.0.0/Guise-2.0.0.apk",
-  "apkSha256": "d7ac980a8cc849aa76589fd0bb6534c589e2c73c27adbaa1bb7b23cd41d96798"
+  "apkUrl": "https://github.com/daxiaamu/Guise_Reborn/releases/download/v2.0.3/Guise-2.0.3.apk",
+  "apkSha256": "5021e6fda58f4fae20b085f9b102a769f8b4faeb683a891b69afb16878f25171"
 }
