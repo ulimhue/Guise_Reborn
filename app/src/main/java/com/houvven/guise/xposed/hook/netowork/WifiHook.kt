@@ -1,5 +1,6 @@
 package com.houvven.guise.xposed.hook.netowork
 
+import android.net.wifi.ScanResult
 import android.net.wifi.WifiInfo
 import android.net.wifi.WifiManager
 import com.houvven.guise.xposed.LoadPackageHandler
@@ -8,38 +9,52 @@ import com.houvven.ktx_xposed.hook.afterHookedMethod
 import com.houvven.ktx_xposed.hook.setMethodResult
 
 internal class WifiHook : LoadPackageHandler {
+    @Volatile
+    private var connectedBssid: String? = null
+
     override fun onHook() {
         // LocationHook owns these values when Wi-Fi-derived identifiers are intentionally hidden.
         if (config.makeWifiLocationFail) return
+        if (config.wifiSSID.isNotBlank() || config.wifiBSSID.isNotBlank()) {
+            hookConnectedBssid()
+            hookConnectedScanResult()
+        }
+
         WifiInfo::class.java.run {
             if (config.wifiSSID.isNotBlank()) setMethodResult("getSSID", "\"${config.wifiSSID}\"")
-            if (config.wifiBSSID.isNotBlank()) setMethodResult("getBSSID", config.wifiBSSID)
             if (config.wifiMacAddress.isNotBlank()) setMethodResult("getMacAddress", config.wifiMacAddress)
         }
 
-        // Preserve the original Guise behavior: mutate the returned object before application-side
-        // privacy wrappers can cache or copy it. Getter hooks above remain as a compatibility layer.
-        if (config.wifiBSSID.isNotBlank() || config.wifiMacAddress.isNotBlank()) {
-            WifiManager::class.java.afterHookedMethod("getConnectionInfo") { param ->
-                param.result?.let { wifiInfo ->
-                    if (config.wifiBSSID.isNotBlank()) {
-                        setWifiInfoField(wifiInfo, "mBSSID", config.wifiBSSID)
-                    }
-                    if (config.wifiMacAddress.isNotBlank()) {
-                        setWifiInfoField(wifiInfo, "mMacAddress", config.wifiMacAddress)
-                    }
-                }
-            }
-        }
-
         if (config.networkType == HooksValue.NET_WIFI) {
-            WifiManager::class.java.setMethodResult("getWifiState", WifiManager.WIFI_STATE_ENABLED)
+            WifiManager::class.java.run {
+                setMethodResult("getWifiState", WifiManager.WIFI_STATE_ENABLED)
+                setMethodResult("isWifiEnabled", true)
+            }
         }
     }
 
-    private fun setWifiInfoField(wifiInfo: Any, name: String, value: String) {
-        runCatching {
-            wifiInfo.javaClass.getDeclaredField(name).apply { isAccessible = true }.set(wifiInfo, value)
+    private fun hookConnectedBssid() {
+        WifiInfo::class.java.afterHookedMethod("getBSSID") { param ->
+            connectedBssid = param.result as? String
+            if (config.wifiBSSID.isNotBlank()) param.result = config.wifiBSSID
+        }
+    }
+
+    private fun hookConnectedScanResult() {
+        WifiManager::class.java.afterHookedMethod("getScanResults") { param ->
+            val wifiManager = param.thisObject as? WifiManager ?: return@afterHookedMethod
+            val scanResults = param.result as? List<*> ?: return@afterHookedMethod
+            if (scanResults.isEmpty()) return@afterHookedMethod
+            wifiManager.connectionInfo?.bssid ?: return@afterHookedMethod
+            val currentBssid = connectedBssid ?: return@afterHookedMethod
+
+            scanResults.asSequence()
+                .filterIsInstance<ScanResult>()
+                .filter { currentBssid.equals(it.BSSID, ignoreCase = true) }
+                .forEach { result ->
+                    if (config.wifiSSID.isNotBlank()) result.SSID = config.wifiSSID
+                    if (config.wifiBSSID.isNotBlank()) result.BSSID = config.wifiBSSID
+                }
         }
     }
 }
